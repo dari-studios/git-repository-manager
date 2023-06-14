@@ -4,6 +4,16 @@
 #include <string>
 #include <vector>
 
+// Struct to store list of repositories
+// Also stores the hasChange flag
+struct repoData
+{
+    std::vector<std::string> repoList;
+    bool repoStatus = false;
+};
+
+// Lists repositories and allow user to choose one to edit
+// This is effectively a mini program
 void addIgnore(std::vector<std::string> &repoList, std::string currPath)
 {
     // Main loop for the ignore program

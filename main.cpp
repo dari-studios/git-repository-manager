@@ -2,42 +2,54 @@
 
 int main()
 {
+    // Variable to check for first run
     bool firstRun = true;
-    std::fstream mainDir;
 
     // Store current path for later use
     std::string currPath = std::filesystem::current_path().string();
 
-    // Create vector to store list of repositories and their status
-    std::vector<std::string> repoList;
+    // Initialize object which contains all data
+    repoData repoData;
 
+    // Main loop
     while (true)
     {
-        std::cout << "Git Repository Manager v1.0\n";
-
         // Clear out any old entries to avoid corruption
-        repoList.clear();
+        repoData.repoList.clear();
 
-        // Startup routine
         // Find valid repositories
-        findRepos(repoList, currPath);
+        findRepos(repoData.repoList, currPath);
 
+        // If there are no repos, exit
+        if (repoData.repoList.empty())
+        {
+            std::cout << "No repositories detected, exiting...\n";
+            return 0;
+        }
+
+        // Run some commands on first run only
         if (firstRun)
         {
             std::cout << "Refreshing repositories...\n";
             // Fetch from remotes
-            gitComm(repoList, currPath, 0);
+            gitComm(repoData.repoList, repoData.repoStatus, currPath, 0);
 
             // List status
-            gitComm(repoList, currPath, 1);
+            gitComm(repoData.repoList, repoData.repoStatus, currPath, 1);
 
             firstRun = false;
         }
 
+        // Entry message
+        std::cout << "\n-------------------------------------\n";
+        std::cout << "Git Repository Manager v1.0\n";
+
+        // Prompt and run command loop
         while (true)
         {
             int choice;
 
+            // Prompt user for choice
             std::cout << "\nWhat would you like to do?\n\n";
             std::cout << "\
             1) Get status \n\
@@ -52,7 +64,7 @@ int main()
             std::cout << "\nEnter option: ";
             std::cin >> choice;
 
-            //ignore newline character
+            // ignore newline character
             std::cin.ignore();
 
             if (choice < 1 || choice > 8)
@@ -61,8 +73,9 @@ int main()
                 choice = 0;
                 continue;
             }
-            gitComm(repoList, currPath, choice);
+            gitComm(repoData.repoList, repoData.repoStatus, currPath, choice);
             break;
-        }
-    }
+        } //..end prompt & run loop
+
+    } //.. end main loop
 }

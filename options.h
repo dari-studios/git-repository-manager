@@ -8,7 +8,7 @@ void findRepos(std::vector<std::string> &repoList, std::string currPath)
     for (auto dir : std::filesystem::directory_iterator(currPath))
     {
         // Variable to store the path to check
-        std::string dirCheck = dir.path().string() + "\\.git";
+        std::string dirCheck = dir.path().string() + "/.git";
 
         // If .git folder exists, then add it to the list
         if (std::filesystem::is_directory(dirCheck))
@@ -24,8 +24,11 @@ void commitWithMsg(bool hasChange, std::string currRepo)
     std::fstream commitMsgFile;
     std::string commitMsg;
 
+    // Only run if current repository has changes
+    // Otherwise do nothing
     if (hasChange)
     {
+        // Open file in append-only mode to create it
         commitMsgFile.open("COMMITMSG.txt", std::fstream::app);
 
         // Add commit message
@@ -41,7 +44,7 @@ void commitWithMsg(bool hasChange, std::string currRepo)
         system("git commit -a -F COMMITMSG.txt");
 
         // Clean up
-        std::filesystem::remove(std::filesystem::current_path().string() + "\\COMMITMSG.txt");
+        std::filesystem::remove(std::filesystem::current_path().string() + "/COMMITMSG.txt");
         std::cout << "Done.\n\n";
     }
 }
@@ -68,71 +71,92 @@ void checkForChange(bool &hasChange)
     hasChange = lines > 9 ? true : false;
 
     gitStatus.close();
-    std::filesystem::remove(std::filesystem::current_path().string() + "\\gitstatus.txt");
+    std::filesystem::remove(std::filesystem::current_path().string() + "/gitstatus.txt");
 }
 
 // General function for commands
-void gitComm(std::vector<std::string> repoList, std::string currPath, int option)
+void gitComm(std::vector<std::string> repoList, bool &hasChange, std::string currPath, int option)
 {
-    // Boolean for detecting changes
-    bool hasChange = false;
 
     // For every repository in the list, we will execute the requested command
     // Note that some commands are run-once
     for (std::string currRepo : repoList)
     {
-        // Navigate to repo directory
+        // Navigate to repository directory
         currPath.append(currRepo);
-        // std::cout << "Target dir: " << currPath << "\n";
         std::filesystem::current_path(currPath);
 
-        // Execute given command
+        /* Execute given command
+
+        Reference:
+        0: Fetch            1: Get status       2: Add files to staging
+        3: Commit changes   4: Push changes     5: Launch shell
+        6: Add to gitignore 7: Pull changes     8: Exit
+
+        */
         switch (option)
         {
         case 0:
-            // Fetch
+            std::cout << "\n-------------------------------------\n";
             std::cout << "Fetching from " << currRepo << "...\n";
+
+            // Fetch from remote
             system("git fetch");
-            std::cout << "Done.\n\n";
+
+            std::cout << "Done.";
             break;
 
         case 1:
-            // Get status
+            std::cout << "\n-------------------------------------\n";
             std::cout << "\nStatus of " << currRepo << ": \n\n";
+
+            // Get repository's status
             system("git status");
-            std::cout << "\n-------------------------------------";
+
             break;
 
         case 2:
-            // Add files to staging
+            std::cout << "\n-------------------------------------\n";
             std::cout << "Adding files from " << currRepo << " to staging...\n";
+
+            // Add files
             system("git add -A");
+
+            std::cout << "Done.";
             break;
 
         case 3:
-            // Commit changes
-
-            // Mark repositories with changes
+            // Mark if repository has changes
             checkForChange(hasChange);
+
+            // If so, commit
             commitWithMsg(hasChange, currRepo);
+
             break;
 
         case 4:
-            // Push to remote
+            std::cout << "\n-------------------------------------\n";
             std::cout << "Pushing changes to remote of " << currRepo << "...\n";
+
+            // Push to remote with no output
             system("git push | true");
-            std::cout << "Done.\n\n";
+
+            std::cout << "Done.";
             break;
 
         case 5:
-            // Launch shell environment
             std::cout << "Launching bash environment...\n";
+
+            // Launch shell
             system("bash");
+
             std::cout << "Exiting Shell environment...\n";
 
             // Reset and return, do not want a shell for every repository
             currPath.erase(currPath.size() - currRepo.length());
             std::filesystem::current_path(currPath);
+
+            // Exit function
             return;
 
         case 6:
@@ -142,25 +166,30 @@ void gitComm(std::vector<std::string> repoList, std::string currPath, int option
             // Reset path before entering environment
             currPath.erase(currPath.size() - currRepo.length());
             std::filesystem::current_path(currPath);
+
+            // Enter gitignore editor environment
             addIgnore(repoList, currPath);
-            // Reset
+
+            // Exit function
             return;
 
         case 7:
-            // Pull from remotes
+            std::cout << "\n-------------------------------------\n";
             std::cout << "Pulling changes from remote of " << currRepo << "...\n";
 
+            // Pull from fetched data
             system("git pull");
 
+            std::cout << "Done.";
             break;
 
         case 8:
             // Exit program
             exit(0);
         }
-        // Cut off attachment and navigate back to base
+
+        // Cut off attachment and navigate back to reference directory
         currPath.erase(currPath.size() - currRepo.length());
-        // std::cout << "Reference dir: " << currPath << "\n";
         std::filesystem::current_path(currPath);
     }
 }
