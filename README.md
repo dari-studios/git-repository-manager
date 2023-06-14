@@ -30,17 +30,28 @@ The program will have basic functions such as ensuring that the correct input is
 ### Flowchart
 ```mermaid
 flowchart TD
-    A(Program start) --> B[Scan folders in directory for git repository] --> C[Show user the list of detected repositories] --> C1[Fetch from remotes] --> C2[Show status of each] --> D[/Show menu and ask user for option/]
-    D -- Add all --> E[Add all files to staging] ----> K
-    D -- Commit all ----> F[/Ask for commit message/] --> F1{User wants to attach date?}
-    F1 -- Yes ----> F2[Attach date] --> F3
-    F1 -- No --> F3[Commit with specified message] ----> K
-    D -- Push all --> G[Push all committed changes] ----> K
-    D -- Shell environment --> H[Launch shell] ---->  K
-    D -- Add files to ignore --> I[Prompt user for files to ignore] --> J[Add files to .gitignore] ----> K
-    D -- Pull all --> N[Pull changes in from remotes] ----> K
-    D =====> L[Exit] =====> M(Terminate program)
-    K[Show what got modified] -. Return to main menu .-> D
+    A(Program start) --> B[Scan folders in directory for git repository] --> C[Show user the list of detected repositories]
+    C--> C1[Fetch from remotes] --> C2[Show status of each] --> D[/Show menu and ask user for option/]
+    D --> D1[Navigate to first repository] --> D2{User picked?}
+    D2 -- Get status --> E1[Show status] --> F1
+    D2 -- Add to staging area --> E2[Add files] --> F1
+
+    D2 -- Commit all changes --> E3{Repository has changes?}
+    E3 -- Yes --> E31[Commit files and ask for message] --> F1
+    E3 --> No --> E32[Do nothing] --> F1
+
+    D2 -- Push all changes --> E4[Push to remotes] --> F1
+    D2 -- Launch shell --> E5[Launch shell environment] --> G1
+    D2 -- Add to .gitignore --> E6[Launch gitignore editor] --> G1
+    D2 -- Pull all changes --> E7[Pull changes from remotes] --> F1
+    D2 -- Exit --> E8([Terminate program])
+
+    G1[Return to base directory] --> D
+
+    F1{Are there are more repositories?} -- Yes --> F2[Navigate to next repository] --> D2
+    F1{Are there are more repositories?} -- No --> D
+
+
 ```
 ---
 
