@@ -29,10 +29,12 @@ The program will have basic functions such as ensuring that the correct input is
 
 ### Flowchart
 ```mermaid
-flowchart TD
+flowchart LR
     A(Program start) --> B[Scan folders in directory for git repository] --> C[Show user the list of detected repositories]
     C--> C1[Fetch from remotes] --> C2[Show status of each] --> D[/Show menu and ask user for option/]
-    D --> D1[Navigate to first repository] --> D2{User picked?}
+    D --> D1[Navigate to first repository] 
+    
+    D1 --> D2{User picked?}
     D2 -- Get status --> E1[Show status] --> F1
     D2 -- Add to staging area --> E2[Add files] --> F1
 
@@ -44,7 +46,8 @@ flowchart TD
     D2 -- Launch shell --> E5[Launch shell environment] --> G1
     D2 -- Add to .gitignore --> E6[Launch gitignore editor] --> G1
     D2 -- Pull all changes --> E7[Pull changes from remotes] --> F1
-    D2 -- Exit --> E8([Terminate program])
+    D2 -- exit --> E8([Terminate program])
+
 
     G1[Return to base directory] --> D
 
