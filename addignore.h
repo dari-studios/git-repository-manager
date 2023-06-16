@@ -48,7 +48,8 @@ void addIgnore(std::vector<std::string> &repoList, std::string currPath)
         // List repositories here...
         for (std::string repo : repoList)
         {
-            std::cout << "\n1 > " << repo;
+            i++;
+            std::cout << "\n" << i << " > " << repo;
         }
 
         // Prompt user for choice

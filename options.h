@@ -50,20 +50,21 @@ void commitWithMsg(bool hasChange, std::string currRepo)
         commitMsgFile.open("COMMITMSG.txt", std::fstream::app);
 
         // Add commit message
+        std::cout << "\n-------------------------------------\n";
         std::cout << "Enter commit message for " << currRepo << ": ";
         std::getline(std::cin, commitMsg);
 
-        // Close file so it gets written
+        // Close file so it gets written    
         commitMsgFile << commitMsg;
         commitMsgFile.close();
 
         // Make commit
-        std::cout << "Committing changes from " << currRepo << "...\n";
+        std::cout << "\nCommitting changes from " << currRepo << "...\n\n";
         system("git commit -a -F COMMITMSG.txt");
 
         // Clean up
         std::filesystem::remove(std::filesystem::current_path().string() + "/COMMITMSG.txt");
-        std::cout << "Done.\n\n";
+        std::cout << "Done.";
     }
 }
 
@@ -166,7 +167,7 @@ void gitComm(std::vector<std::string> repoList, bool &hasChange, std::string cur
             std::cout << "Launching bash environment...\n";
 
             // Launch shell
-            system("bash");
+            system("bash && cd ..");
 
             std::cout << "Exiting Shell environment...\n";
 
@@ -179,7 +180,7 @@ void gitComm(std::vector<std::string> repoList, bool &hasChange, std::string cur
 
         case 6:
             // Provide user option to edit gitignore
-            std::cout << "Launching .gitignore editor...";
+            std::cout << "Launching .gitignore editor...\n";
 
             // Reset path before entering environment
             currPath.erase(currPath.size() - currRepo.length());
