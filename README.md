@@ -57,111 +57,24 @@ flowchart LR
 
 ```
 ---
+### Usage
 
-### Sample Run
-```
+Basic workflow:
 
-user@zsh ~> grepomanager
+1. Launch program and fetch
+2. Pull in any changes from remote
+3. Add any files you want to explicitly ignore to .gitignore
+4. Add any untracked files
+5. Commit all changes
+6. Push to remotes
+7. Repeat!
 
-Git repository manager v0.1.0
+All of the options directly call on git, and do not add any special parameters
 
-Scanning for repositories in <directory>...
-Found 3 git repositories!
-<repo1>
-<repo2>
-<repo3>
+Additionally, one should automate managing multiple repositories unless they understand how git itself works
 
-Fetching from remote...
+**Please refer to git's documentation for proper usage beyond what has been listed (including info on how to solve merge conflicts!)**
 
-Status of <repo1>:
-Untracked files:
-foo.txt
-bar.html
-baz.md
-
-Status of <repo2>
-2 Commits ahead, 0 commits behind
-
-Status of <repo3>
-Unsaved changes in:
-foo.html
-bar.cpp
-
-What would you like to do?
-A) Add all files
-B) Commit all files to staging
-C) Push all staged commits
-D) Launch shell
-E) Add files to ignore
-F) Pull changes from remote
-G) Exit (or Ctrl-C at any time!)
-
-Enter option: A
-
-Added: 
-<repo1>:
-foo.txt
-bar.html
-baz.md
-
-Done!
-
-What would you like to do?
-A) Add all files
-B) Commit all files to staging
-C) Push all staged commits
-D) Launch shell
-E) Add files to ignore
-F) Pull changes from remote
-G) Exit (or Ctrl-C at any time!)
-
-Enter option: B
-
-Committed:
-
-<repo1>:
-foo.txt
-bar.html
-baz.md
-
-<repo2>:
-foo.html
-bar.cpp
-
-Done!
-
-What would you like to do?
-A) Add all files
-B) Commit all files to staging
-C) Push all staged commits
-D) Launch shell
-E) Add files to ignore
-F) Pull changes from remote
-G) Exit (or Ctrl-C at any time!)
-
-Enter option: C
-
-Pushed 1 commit to <repo1's remote URL>
-Pushed 2 commits to <repo2's remote url>
-Pushed 1 commit to <repo3's remote URL>
-
-Done!
-
-What would you like to do?
-A) Add all files
-B) Commit all files to staging
-C) Push all staged commits
-D) Launch shell
-E) Add files to ignore
-F) Pull changes from remote
-G) Exit (or Ctrl-C at any time!)
-
-Enter option: G
-
-Exiting...
-
-user@zsh ~> 
-```
 ---
 
 ### Further notes
