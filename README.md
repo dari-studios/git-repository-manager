@@ -75,6 +75,8 @@ Additionally, one should automate managing multiple repositories unless they und
 
 **Please refer to git's documentation for proper usage beyond what has been listed (including info on how to solve merge conflicts!)**
 
+https://git-scm.com/docs
+
 ---
 
 ### Further notes
