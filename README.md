@@ -61,13 +61,14 @@ flowchart LR
 
 Basic workflow:
 
-1. Launch program and fetch
-2. Pull in any changes from remote
-3. Add any files you want to explicitly ignore to .gitignore
-4. Add any untracked files
-5. Commit all changes
-6. Push to remotes
-7. Repeat!
+1. Clone target repository (git clone <url>)
+2. Launch program in the folder that contains the repositories you want to manage
+3. Pull in any changes from remote
+4. Add any files you want to explicitly ignore to .gitignore
+5. Add any untracked files
+6. Commit all changes
+7. Push to remotes
+8. Repeat!
 
 All of the options directly call on git, and do not add any special parameters
 
